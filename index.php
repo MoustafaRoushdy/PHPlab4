@@ -2,8 +2,6 @@
 ini_set('display_errors', 1); 
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-echo "hello Isco";
-
 
 session_start();
 require_once("vendor/autoload.php");
@@ -23,6 +21,8 @@ $capsule->addConnection([
 ]);
 $capsule->setAsGlobal();
 $capsule->bootEloquent();
+$table = Capsule::table("items");
+
 
 $index = (isset($_GET["index"]) && is_numeric($_GET["index"]) && ($_GET["index"] > 0)) ? (int)$_GET["index"]:0;
 $all_records = Capsule::table("items")->skip($index)->take(_pager_size_)->get();
@@ -35,6 +35,39 @@ $next_link = "http://localhost/php/lect/Day4/Resources/?index=".$next_index;
 $prev_index = ($index- _pager_size_ >= 0)?$index-_pager_size_ :0;
 $prev_link = "http://localhost/php/lect/Day4/Resources/?index=$prev_index";
 
-require_once ('views/table.php');
-?>
+/*
+$price = Capsule::table("items")->where("product_name","like","cat eye")->value("list_price");
+$average= Capsule::table("items")->pluck( "list_price")->avg(); 
+$average = round($average,3);
+
+if(Capsule::table("items")->where('product_name','like',"oval")->exists())
+{
+    $is_existed = true;
+}
+ else 
+    
+ {
+     $is_existed = false;
+ }
+ 
+ 
+ $american_products = Capsule::table("items")
+         ->where("CouNtry","like","usa","or")
+         ->where("product_name","<>","","or")
+         ->pluck("product_name");
+ 
+ */
+ 
+//require_once ('views/single.php');
+
+if (isset($_GET["glass"]) && is_numeric($_GET["glass"]) && (int)($_GET["glass"]>=0))
+{
+    require_once("views/details.php");
+}
+else
+{
+    require_once ('views/table.php');
+}
+
+
 
